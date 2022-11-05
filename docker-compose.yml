@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  translator:
+    image: libretranslate/libretranslate
+    restart: always
+    environment:
+      - LT_LOAD_ONLY=de,es,en
+    ports:
+      - "8050:5000"
+  cache:
+    image: redis:alpine
+    volumes:
+      - ../.redis-data:/data
+    restart: always
+  app:
+    build: ./
+    environment:
+      - CONSUMER_KEY=
+      - CONSUMER_SECRET=
+      - ACCESS_TOKEN=
+      - ACCESS_TOKEN_SECRET=
+    ports:
+      - "8080:8080"
+    depends_on:
+      - cache
